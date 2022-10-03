@@ -5,13 +5,13 @@ import yaml
 from yacs.config import CfgNode
 
 
-def to_py_obj(cfg: CfgNode, cls_name: str):
+def _to_py_obj(cfg: CfgNode, cls_name: str):
     classes = {}
     d = {}
     for k, v in cfg.items():
         if isinstance(v, CfgNode):
             _clsname = str.capitalize(k)
-            clss, _ = to_py_obj(v, _clsname)
+            clss, _ = _to_py_obj(v, _clsname)
             classes.update(clss)
             d[k] = _clsname
         else:
@@ -24,7 +24,15 @@ def to_py_obj(cfg: CfgNode, cls_name: str):
 def build_pyi(
     cfg: CfgNode, path: Union[Path, str], cls_name="AutoConfig", var_name="cfg"
 ):
-    d, _ = to_py_obj(cfg, cls_name)
+    """Generate a stub file (*.pyi) for the given config object.
+
+    :param cfg: the `CfgNode` object to generate stub.
+    :param path: the stub file output path or the cfg module file path. The suffix will be override.
+    :param cls_name: Generated name of the root config class. You can assign an alias of `CfgNode` to this param.
+    :param var_name: name of the `cfg` object. You should passin this param correctly.
+    """
+    assert cls_name != var_name, "class name should not be the same with var name"
+    d, _ = _to_py_obj(cfg, cls_name)
     d[var_name] = cls_name
     path = Path(path)
     with open(path.with_suffix(".pyi"), "w") as f:

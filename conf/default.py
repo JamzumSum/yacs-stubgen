@@ -16,4 +16,5 @@ _C.LOGDIR = "./results"
 
 from yacs_stubgen import build_pyi
 
+AutoConfig = CN
 build_pyi(_C, __file__, var_name="_C")
