@@ -1,0 +1,10 @@
+.venv
+.vscode
+.env
+
+*.pyc
+
+conf/*
+!conf/default.py
+
+/test.*
