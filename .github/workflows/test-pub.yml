@@ -21,7 +21,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: poetry
-      - run: |
+      - name: Install and Test
+        run: |
           poetry install -n -vv
           poetry run python conf/default.py && [ -f conf/default.pyi ] && echo "✅"
 

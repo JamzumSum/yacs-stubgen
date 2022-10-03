@@ -1,6 +1,6 @@
 # yacs-stubgen
 
-Add typing support for your yacs config by generating stub file.
+Add typing support for your YACS config by generating stub file.
 
 [![python](https://img.shields.io/pypi/pyversions/yacs-stubgen?logo=python&logoColor=white)][home]
 [![version](https://img.shields.io/pypi/v/yacs-stubgen?logo=python)][pypi]
@@ -24,7 +24,7 @@ pip install git+github.com/JamzumSum/yacs-stubgen.git
 
 ## Usage
 
-Add typing support for your yacs config by appending two lines:
+Add typing support for your [yacs][yacs] config by appending just two lines:
 
 ```py
 _C.MODEL.DEVICE = 'cuda'
@@ -42,7 +42,9 @@ Then you will get typing and auto-complete support **if your IDE supports stub f
 
 ## License
 
-- MIT
+- [MIT](LICENSE)
+- [YACS][yacs] is under [Apache-2.0](https://github.com/rbgirshick/yacs/LICENSE)
 
+[yacs]: https://github.com/rbgirshick/yacs
 [home]: https://github.com/JamzumSum/yacs-stubgen
 [pypi]: https://pypi.org/project/yacs-stubgen
