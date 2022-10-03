@@ -2,6 +2,10 @@
 
 Add typing support for your yacs config by generating stub file.
 
+[![python](https://img.shields.io/pypi/pyversions/yacs-stubgen?logo=python&logoColor=white)][home]
+[![version](https://img.shields.io/pypi/v/yacs-stubgen?logo=python)][pypi]
+[![workflow](https://github.com/JamzumSum/yacs-stubgen/actions/workflows/test-pub.yml/badge.svg)](https://github.com/JamzumSum/yacs-stubgen/actions/workflows/test-pub.yml)
+
 ## Install
 
 <details>
@@ -39,3 +43,6 @@ Then you will get typing and auto-complete support **if your IDE supports stub f
 ## License
 
 - MIT
+
+[home]: https://github.com/JamzumSum/yacs-stubgen
+[pypi]: https://pypi.org/project/yacs-stubgen
