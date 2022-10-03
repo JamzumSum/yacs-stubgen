@@ -79,10 +79,10 @@ it as `filename.pyi` (that's why a path is required). Now supporting IDE will de
 file and is able to type-check and intellisense your code.
 
 However, the stub file does nothing with actual code executing. If you import the generated
-class (default as "AutoClass"), an `ImportError` will be raised. This time you can add an variable
-(aka. type alias) refers to `CfgNode` in the config file. We will override the type of this alias
-to our generated class ("AutoClass"). Thus you can import the "AutoClass" normally and intuitively,
-while the type alias is treated as "AutoClass" by IDE but is actually a `CfgNode` type.
+class (default as "AutoConfig"), an `ImportError` will be raised. This time you can add a variable
+(aka. type alias) refers to `CfgNode` in the `*.py` file. We will override the type of this alias
+to our generated class ("AutoConfig") in the stub file. Thus you can import the "AutoConfig"
+normally and intuitively, while the type alias is treated as "AutoConfig" by IDE but is actually a `CfgNode` type.
 
 </details>
 
