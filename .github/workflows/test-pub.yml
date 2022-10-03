@@ -31,7 +31,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Poetry and Publish to PyPI
+        id: publish
         run: |
           pipx install poetry
+          echo "::set-output name=version::$(poetry version -s)"
           export POETRY_PYPI_TOKEN_PYPI=${{ secrets.PYPI_TOKEN }}
-          poetry publish --build
+          poetry publish -n --build
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          prerelease: ${{ startsWith(github.head_ref, 'dev') }}
+          tag_name: ${{ steps.publish.outputs.version }}
+          name: ${{ steps.publish.outputs.version }}
+          generate_release_notes: true
