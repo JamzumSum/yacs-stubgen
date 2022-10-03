@@ -33,7 +33,7 @@ def inspect_module(mod_path: Path, ROOT: Path):
             cfg = v
             varname = k
         elif isinstance(v, type):
-            if issubclass(v, CfgNode):
+            if k != "CN" and issubclass(v, CfgNode):
                 clsname = k
         if clsname and varname:
             break

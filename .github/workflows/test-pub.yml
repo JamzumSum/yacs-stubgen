@@ -3,7 +3,7 @@ name: Test, Build and Publish
 on:
   push:
     paths:
-      - "src/yacs_stubgen/**"
+      - "src/**"
       - "poetry.lock"
       - ".github/workflows/test-pub.yml"
 
