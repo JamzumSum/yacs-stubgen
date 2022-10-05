@@ -6,6 +6,8 @@ Add typing support for your YACS config by generating stub file.
 [![version](https://img.shields.io/pypi/v/yacs-stubgen?logo=python)][pypi]
 [![workflow](https://github.com/JamzumSum/yacs-stubgen/actions/workflows/test-pub.yml/badge.svg)](https://github.com/JamzumSum/yacs-stubgen/actions/workflows/test-pub.yml)
 
+![screencap](assets/screencap.gif)
+
 ## Install
 
 Install from PyPI:
