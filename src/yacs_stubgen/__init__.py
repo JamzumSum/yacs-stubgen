@@ -21,6 +21,14 @@ def _to_py_obj(cfg: CfgNode, cls_name: str):
     return classes, d
 
 
+class _BlackDumper(yaml.SafeDumper):
+    def write_line_break(self, data=None):
+        super().write_line_break(data)
+
+        if len(self.indents) == 1:
+            super().write_line_break()
+
+
 def build_pyi(
     cfg: CfgNode, path: Union[Path, str], cls_name="AutoConfig", var_name="cfg"
 ):
@@ -38,4 +46,12 @@ def build_pyi(
     with open(path.with_suffix(".pyi"), "w") as f:
         # f.write("from typing import *\n")
         f.write("from yacs.config import CfgNode as CN\n\n")
-        yaml.safe_dump(d, f, sort_keys=False)
+        yaml.dump(
+            d,
+            f,
+            Dumper=_BlackDumper,
+            indent=4,
+            default_flow_style=False,
+            canonical=False,
+            sort_keys=False,
+        )
