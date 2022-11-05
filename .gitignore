@@ -4,7 +4,6 @@
 
 *.pyc
 
-conf/*
-!conf/default.py
+conf
 
 /test.*
