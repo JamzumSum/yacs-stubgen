@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v3
       - run: pipx install poetry
@@ -24,7 +24,7 @@ jobs:
       - name: Install and Test
         run: |
           poetry install -n -vv
-          poetry run python conf/default.py && [ -f conf/default.pyi ] && echo "✅"
+          poetry run pytest tests
 
   publish:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
         id: publish
         run: |
           pipx install poetry
-          echo "::set-output name=version::$(poetry version -s)"
+          echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
           export POETRY_PYPI_TOKEN_PYPI=${{ secrets.PYPI_TOKEN }}
           poetry publish -n --build
       - uses: softprops/action-gh-release@v1
