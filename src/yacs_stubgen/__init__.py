@@ -1,5 +1,4 @@
 from pathlib import Path
-from types import NoneType
 from typing import Any, Dict, Optional, Union
 
 import yaml
@@ -8,7 +7,7 @@ from yacs.config import CfgNode
 typo_map = {
     list: "T.Sequence",
     tuple: "T.Sequence",
-    NoneType: "T.Any",
+    type(None): "T.Any",
 }
 
 
