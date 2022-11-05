@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yacs-stubgen"
-version = "0.2.2"
+version = "0.3.0"
 description = "Generate stub file for yacs config."
 authors = ["JamzumSum <zzzzss990315@gmail.com>"]
 license = "MIT"
@@ -14,6 +14,12 @@ repository = "https://github.com/JamzumSum/yacs-stubgen"
 [tool.poetry.dependencies]
 python = "^3.6.2"
 yacs = "~0.1.4"
+
+[tool.poetry.group.test.dependencies]
+pytest = [
+    { version = "^7.2.0", python = "^3.7" },
+    { version = "<7.1.0", python = "~3.6.2" },
+]
 
 [tool.poetry.group.dev]
 optional = true
