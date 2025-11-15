@@ -45,7 +45,7 @@ jobs:
           echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
           uv build --no-sources
           uv publish --username __token__
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v2
         with:
           files: dist/*
           prerelease: ${{ startsWith(github.head_ref, 'dev') }}
