@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "release"
+      - "release/**"
+      - "beta"
+      - "beta/**"
+      - "dev"
+      - "dev/**"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'release')
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - name: Install Poetry and Publish to PyPI
+        id: publish
+        env:
+          UV_PUBLISH_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
+          uv build --no-sources
+          uv publish --username __token__
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          prerelease: ${{ startsWith(github.head_ref, 'dev') }}
+          tag_name: ${{ steps.publish.outputs.version }}
+          name: ${{ steps.publish.outputs.version }}
+          generate_release_notes: true
