@@ -14,31 +14,42 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
+      - name: Preview updates
+        id: preview
+        env:
+          NO_COLOR: 1
+        run: |
+          set -euo pipefail
+          uv lock -U --dry-run > /tmp/preview.txt
+          DELIM="EOF_$(date +%s)_$$"
+          {
+            echo "log<<$DELIM"
+            head -n 50 /tmp/preview.txt
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
       - name: Update lockfile
         id: update
+        env:
+          NO_COLOR: 1
         run: |
+          set -euo pipefail
           uv lock -U
-          if git diff --quiet uv.lock; then
+          if [ -z "$(git status --porcelain uv.lock)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Extract updated packages
-        if: steps.update.outputs.changed == 'true'
-        id: extract
-        run: |
-          UPDATES=$(git diff uv.lock | grep -E '^\+name = ' | sed 's/^+name = "//;s/"$//' | sort -u | tr '\n' ', ' | sed 's/, $//')
-          echo "updates=$UPDATES" >> "$GITHUB_OUTPUT"
       - name: Commit changes
         if: steps.update.outputs.changed == 'true'
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add uv.lock
-          UPDATES="${{ steps.extract.outputs.updates }}"
-          if [ -n "$UPDATES" ]; then
-            git commit -m "chore(deps): update ${UPDATES}"
-          else
-            git commit -m "chore(deps): update dependencies"
-          fi
+          COMMIT_DELIM="COMMITMSG_$(date +%s)_$$"
+          git commit -F - << "$COMMIT_DELIM"
+          chore(deps): update dependencies
+
+          ${{ steps.preview.outputs.log }}
+          $COMMIT_DELIM
           git push
