@@ -1,0 +1,44 @@
+name: Update uv Dependencies
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - name: Update lockfile
+        id: update
+        run: |
+          uv lock -U
+          if git diff --quiet uv.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Extract updated packages
+        if: steps.update.outputs.changed == 'true'
+        id: extract
+        run: |
+          UPDATES=$(git diff uv.lock | grep -E '^\+name = ' | sed 's/^+name = "//;s/"$//' | sort -u | tr '\n' ', ' | sed 's/, $//')
+          echo "updates=$UPDATES" >> "$GITHUB_OUTPUT"
+      - name: Commit changes
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add uv.lock
+          UPDATES="${{ steps.extract.outputs.updates }}"
+          if [ -n "$UPDATES" ]; then
+            git commit -m "chore(deps): update ${UPDATES}"
+          else
+            git commit -m "chore(deps): update dependencies"
+          fi
+          git push
